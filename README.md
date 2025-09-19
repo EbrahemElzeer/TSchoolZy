@@ -37,4 +37,5 @@ The **frontend design** is based on the TeknoLab HTML Template, while the **back
 ## 🚀 Setup Instructions
 1. Clone the repository:
    ```bash
+   https://github.com/EbrahemElzeer/TSchoolZy
   
