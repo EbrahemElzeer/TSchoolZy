@@ -1,0 +1,82 @@
+﻿@using Application.Dto
+@using SchoolZyFront.Components.Layout
+@inject HttpClient client
+@layout MainLayout
+
+<div class="rs-pricing pricing-style3 gray-bg pt-125 pb-130 md-pt-75 md-pb-80">
+    <div class="container">
+        <div class="sec-title mb-50 text-center">
+            <span class="sub-text pb-10">// Pricing Plan</span>
+            <h2 class="title">Choose A Plan</h2>
+        </div>
+        <div class="row">
+            @if (packages == null)
+            {
+                <p>Loading packages...</p>
+            }
+            else if (packages.Count == 0)
+            {
+                <p>No packages found.</p>
+            }
+            else
+            {
+                @foreach (var pkg in packages)
+                {
+                    <div class="col-lg-4 md-mb-50">
+                        <div class="pricing-table">
+                            <div class="pricing-table-header">
+                                <h3 class="pricing-table-title">@pkg.Name</h3>
+                            </div>
+                            <div class="pricing-icon">
+                                <img src="@pkg.IconPath" alt="@pkg.Name" />
+                            </div>
+                            <div class="pricing-table-price">
+                                <div class="pricing-table-bags">
+                                    <span class="pricing-currency">$</span>
+                                    <span class="table-price-text">@pkg.Price</span>
+                                    <span class="table-period">/ mo</span>
+                                </div>
+                            </div>
+                            <div class="pricing-table-body">
+                                <ul>
+                                    @if (pkg.Features != null && pkg.Features.Count > 0)
+                                    {
+                                        foreach (var feature in pkg.Features)
+                                        {
+                                            <li>
+                                                <i class="fa fa-check"></i>
+                                                <span>@feature.FeatureText</span>
+                                            </li>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <i class="fa fa-close"></i>
+                                            <span>No features available</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="btn-part">
+                                <a class="readon buy-now services" href="contact.html">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<PackageDto>? packages;
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+         packages = await client.GetFromJsonAsync<List<PackageDto>>("api/Packages");
+        
+    }
+}

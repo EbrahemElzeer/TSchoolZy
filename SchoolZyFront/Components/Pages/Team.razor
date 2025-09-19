@@ -1,0 +1,81 @@
+﻿@page "/Team"
+@using Application.Dto
+@using SchoolZyFront.Components.Layout
+@inject IJSRuntime JS
+@inject HttpClient Http
+@layout MainLayout
+  <div class="rs-breadcrumbs img1">
+                <div class="container">
+                    <div class="breadcrumbs-inner">
+                        <h1 class="page-title">Team Style 3</h1>
+                        <div class="description">
+                            <p>Excepteur sint occaecat cupidatat non proident, sunt in coulpa qui official<br> 
+                            modeserunt mollit anim id est laborum 20 years experience.</p>                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Breadcrumbs End -->
+
+            <!-- Team Start -->
+            <div id="rs-team" class="rs-team team-style4 pt-130 pb-130 md-pt-80 md-pb-80">
+                <div class="container">
+
+        @if (teamMembers == null)
+        {
+            <p>جاري تحميل الفريق...</p>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var member in teamMembers)
+                {
+                    <div class="col-lg-4 col-md-6 mb-30">
+                        <div class="team-item">
+                            <div class="team-img">
+                                <a href="team-single.html">
+                                    <img src="@member.ImagePath" alt="@member.Name" />
+                                </a>
+                            </div>
+                            <div class="team-content">
+                                <div class="team-info">
+                                    <div class="name">
+                                        <a href="team-single.html">@member.Name</a>
+                                    </div>
+                                    <span class="post">@member.Position</span>
+                                </div>
+                                <ul class="social-icon">
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li>
+                                        <a href="@member.LinkedInLink" target="_blank">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+                </div>
+            </div>
+            <!-- Team end -->
+@code {
+    private List<TeamMemberDto> teamMembers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            teamMembers = await Http.GetFromJsonAsync<List<TeamMemberDto>>("api/TeamMember"); // عدّل الرابط حسب الـ API الحقيقي
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error loading team data: " + ex.Message);
+        }
+    }
+}

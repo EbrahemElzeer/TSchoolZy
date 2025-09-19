@@ -1,0 +1,106 @@
+﻿@using Application.Dto
+@using SchoolZyFront.Components.Layout
+@inject HttpClient Http
+@inject IJSRuntime JS
+@layout MainLayout
+
+
+    <!-- Testimonial Section Start -->
+    <div class="rs-testimonial testimonial-style1 bg3 pt-125 pb-130 md-pt-75 md-pb-80">
+        <div class="container">
+            <div class="row y-middle">
+                <div class="col-lg-5">
+                    <div class="sec-title mb-50 md-mb-30">
+                        <span class="sub-text pb-10">// Testimonial</span>
+                        <h2 class="title">
+                            Our Clients <span>Feedback</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="sec-title mb-28">
+                        <p class="desc">We denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rs-carousel owl-carousel"
+                 data-loop="true"
+                 data-items="3"
+                 data-margin="30"
+                 data-autoplay="true"
+                 data-hoverpause="true"
+                 data-autoplay-timeout="5000"
+                 data-smart-speed="800"
+                 data-dots="true"
+                 data-nav="false"
+                 data-nav-speed="false"
+                 data-md-device="3"
+                 data-md-device-nav="false"
+                 data-md-device-dots="false"
+                 data-center-mode="true"
+                 data-ipad-device2="2"
+                 data-ipad-device-nav2="false"
+                 data-ipad-device-dots2="false"
+                 data-ipad-device="2"
+                 data-ipad-device-nav="false"
+                 data-ipad-device-dots="false"
+                 data-mobile-device="1"
+                 data-mobile-device-nav="false"
+                 data-mobile-device-dots="false">
+
+                @if (clients == null)
+                {
+                    <p>Loading clients...</p>
+                }
+                else if (clients.Count == 0)
+                {
+                    <p>No clients found.</p>
+                }
+                else
+                {
+                    @foreach (var client in clients)
+                    {
+                        <div class="testi-item" @key="client.Id">
+                            <div class="item-content">
+                                <div class="desc">
+                                    <img class="quote" src="assets/images/testimonial/main-home/quote.png" alt="quote">
+                                    Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps.
+                                </div>
+                            </div>
+                            <div class="testi-content">
+                                <div class="image-wrap">
+                                    <img src="@client.ImagePath" alt="@client.Name">
+                                </div>
+                                <div class="testi-information">
+                                    <div class="testi-name">@client.Name</div>
+                                    <span class="designation">Assistant Director</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <!-- Testimonial Section End -->
+
+
+@code {
+    List<ClientDto>? clients;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            clients = await Http.GetFromJsonAsync<List<ClientDto>>("api/Clients");
+            Console.WriteLine($"Loaded {clients?.Count ?? 0} clients");
+            await JS.InvokeVoidAsync("reinitOwlCarousel");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading clients: {ex.Message}");
+            clients = new List<ClientDto>();
+        }
+    }
+}

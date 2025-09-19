@@ -1,0 +1,6 @@
+@TSchoolZy_HostAddress = http://localhost:5215
+
+GET {{TSchoolZy_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

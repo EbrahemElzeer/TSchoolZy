@@ -1,0 +1,183 @@
+﻿@page "/Dashboard/Client"
+@using Application.Dto
+@using Microsoft.AspNetCore.Authorization
+
+@inject HttpClient Http
+@layout DashboardLayout
+@attribute [Authorize]
+
+<h3>Clients Management</h3>
+
+<button class="btn btn-primary mb-3" @onclick="ShowAddClientForm">Add New Client</button>
+
+@if (loading)
+{
+    <p>Loading...</p>
+}
+else if (showForm)
+{
+    <EditForm Model="clientModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+
+
+        <div class="mb-3">
+            <label for="name">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="clientModel.Name" />
+            <ValidationMessage For="@(() => clientModel.Name)" class="validation-error" />
+        </div>
+
+        <div class="mb-3">
+            <label for="imagePath">Image URL</label>
+            <InputText id="imagePath" class="form-control" @bind-Value="clientModel.ImagePath" />
+            <ValidationMessage For="@(() => clientModel.ImagePath)" class="validation-error" />
+        </div>
+
+        <button type="submit" class="btn btn-success me-2">Save</button>
+        <button type="button" class="btn btn-secondary" @onclick="HideForm">Cancel</button>
+    </EditForm>
+
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in clientslist)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(client.ImagePath))
+                        {
+                            <img src="@client.ImagePath" alt="@client.Name" style="height:50px;" />
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" @onclick="() => EditClient(client)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteClient(client.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<ClientDto> clientslist = new();
+    ClientDto clientModel = new();
+    bool showForm = false;
+    bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadClients();
+    }
+
+    async Task LoadClients()
+    {
+        try
+        {
+            loading = true;
+            clientslist = await Http.GetFromJsonAsync<List<ClientDto>>("api/Clients");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error loading clients: " + ex.Message);
+            // ممكن تضيف رسالة خطأ للمستخدم هنا
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    void ShowAddClientForm()
+    {
+        clientModel = new ClientDto();
+        showForm = true;
+    }
+
+    void HideForm()
+    {
+        showForm = false;
+    }
+
+    void EditClient(ClientDto client)
+    {
+        clientModel = new ClientDto
+        {
+            Id = client.Id,
+            Name = client.Name,
+            ImagePath = client.ImagePath,
+            IsUpdate = true
+        };
+        showForm = true;
+    }
+
+    async Task DeleteClient(int id)
+    {
+      
+
+        try
+        {
+            var response = await Http.DeleteAsync($"api/Clients/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                clientslist.RemoveAll(c => c.Id == id);
+                StateHasChanged();
+            }
+            else
+            {
+                // handle error
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error deleting client: " + ex.Message);
+        }
+    }
+
+    async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (clientModel.IsUpdate)
+            {
+                var response = await Http.PutAsJsonAsync($"api/Clients/{clientModel.Id}", clientModel);
+                if (response.IsSuccessStatusCode)
+                {
+                    // تحديث البيانات محلياً
+                    var clientToUpdate = clientslist.FirstOrDefault(c => c.Id == clientModel.Id);
+                    if (clientToUpdate != null)
+                    {
+                        clientToUpdate.Name = clientModel.Name;
+                        clientToUpdate.ImagePath = clientModel.ImagePath;
+                    }
+                }
+            }
+            else
+            {
+                var response = await Http.PostAsJsonAsync("api/Clients", clientModel);
+                if (response.IsSuccessStatusCode)
+                {
+                    var newClient = await response.Content.ReadFromJsonAsync<ClientDto>();
+                    clientslist.Add(newClient);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error saving client: " + ex.Message);
+        }
+        showForm = false;
+    }
+
+    [Inject]
+    IJSRuntime JS { get; set; }
+}

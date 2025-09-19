@@ -1,0 +1,113 @@
+﻿@page "/Dashboard/Contact_Forms"
+@using Application.Dto
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http
+@inject IJSRuntime JS
+@layout DashboardLayout
+@attribute [Authorize]
+<h3>Contact Form Submissions</h3>
+
+@if (loading)
+{
+    <p>Loading contact form submissions...</p>
+}
+else if (contactForms == null || contactForms.Count == 0)
+{
+    <p>No contact form submissions found.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Submitted At</th>
+                    <th style="width: 100px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var form in contactForms)
+                {
+                    <tr>
+                        <td data-label="Name">@form.Name</td>
+                        <td data-label="Email">@form.Email</td>
+                        <td data-label="Subject">@form.Subject</td>
+                        <td data-label="Message" style="white-space: pre-wrap;">@form.Message</td>
+                        <td data-label="Submitted At">@form.CreatedAt.ToString("g")</td>
+                        <td data-label="Actions" class="text-start">
+                            <button class="btn btn-sm btn-danger action-btn" @onclick="() => ConfirmDelete(form.Id)">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    List<ContactFormDto> contactForms = new();
+    bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadContactForms();
+    }
+
+    async Task LoadContactForms()
+    {
+        try
+        {
+            loading = true;
+            contactForms = await Http.GetFromJsonAsync<List<ContactFormDto>>($"api/ContactForm");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading contact forms: {ex.Message}");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    async Task ConfirmDelete(int id)
+    {
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this submission?");
+        if (confirmed)
+        {
+            await DeleteForm(id);
+        }
+    }
+
+    async Task DeleteForm(int id)
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"api/ContactForm/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var item = contactForms.FirstOrDefault(c => c.Id == id);
+                if (item != null)
+                {
+                    contactForms.Remove(item);
+                    StateHasChanged(); // Refresh the UI to reflect the deletion
+                }
+            }
+            else
+            {
+                // Log failure if needed
+                Console.WriteLine($"Failed to delete contact form with id {id}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting contact form: {ex.Message}");
+        }
+    }
+}

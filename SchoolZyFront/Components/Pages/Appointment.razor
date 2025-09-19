@@ -1,0 +1,117 @@
+﻿@using Application.Dto
+@using System.Net.Http.Json
+@using SchoolZyFront.Components.Layout
+@inject HttpClient client
+@inject IJSRuntime JS
+@layout MainLayout
+<!-- Appointment Section Start -->
+<div class="rs-appointment pt-130 pb-130 bg1 md-pt-80 md-pb-80">
+    <div class="container">
+        <div class="row y-middle">
+            <div class="col-lg-5 md-mb-50">
+                <div class="contact-wrap">
+                    <div class="content-part mb-25">
+                        <h2 class="title mb-15">Free Consultation</h2>
+                        <p class="desc">We here to help you 24/7 with experts</p>
+                    </div>
+
+                    @* عرض رسالة الحالة *@
+                    
+
+                    <EditForm Model="@contactModel" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                      
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-lg-12 mb-20">
+                                    <input class="from-control" type="text" @bind="contactModel.Name" id="name" name="name" placeholder="Name" required />
+                                    <ValidationMessage For="@(() => contactModel.Name)" class="validation-error" />
+                                </div>
+                                <div class="col-lg-12 mb-20">
+                                    <input class="from-control" type="email" id="email" @bind="contactModel.Email" name="email" placeholder="E-Mail" required />
+                                    <ValidationMessage For="@(() => contactModel.Email)" class="validation-error" />
+
+                                </div>
+                                <div class="col-lg-12 mb-20">
+                                    <input class="from-control" type="text" id="subject" @bind="contactModel.Subject" name="subject" placeholder="Subject" required />
+                                    <ValidationMessage For="@(() => contactModel.Subject)" class="validation-error" />
+
+                                </div>
+                                <div class="col-lg-12 mb-22">
+                                    <textarea class="from-control" id="message" @bind="contactModel.Message" name="message" placeholder="Your message Here" required></textarea>
+                                    <ValidationMessage For="@(() => contactModel.Message)" class="validation-error" />
+
+                                </div>
+                            </div>
+                            <div class="form-group mb-0">
+                                <input class="submit-btn" type="submit" value="Submit Now" />
+                           
+                            </div>
+                        </fieldset>
+                    </EditForm>
+                    
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success mt-3">@successMessage</div>
+                    }
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-3">@errorMessage</div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="rs-contact-box text-center">
+                    <div class="address-icon mb-23">
+                        <img src="assets/images/call-us/phn-icon.png" alt="Call" />
+                    </div>
+                    <div class="sec-title">
+                        <span class="sub-text pb-15 big white-color">// CALL US 24/7</span>
+                        <h2 class="title white-color pb-22">(+123) 456-9989</h2>
+                        <p class="desc desc2 white-color">
+                            Have any idea or project in your mind? Call us or schedule a
+                            <br />
+                            appointment. Our representative will reply you shortly.
+                        </p>
+                    </div>
+                    <div class="btn-part mt-40">
+                        <a class="readon started" href="contact.html">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Appointment Section End -->
+@code {
+    private ContactFormDto contactModel = new ContactFormDto();
+
+    private string? successMessage;
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        successMessage = null;
+        errorMessage = null;
+
+        try
+        {
+            var response = await client.PostAsJsonAsync("api/ContactForm", contactModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                successMessage = "Your message has been sent successfully!";
+                contactModel = new ContactFormDto(); // reset the form
+            }
+            else
+            {
+                errorMessage = "Failed to send your message. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+}

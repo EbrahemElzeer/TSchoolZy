@@ -1,0 +1,93 @@
+﻿@page "/dashboard/Settings"
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+@using Application.Dto
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Rendering
+@inject HttpClient Http
+@layout DashboardLayout
+@attribute [Authorize]
+<h3>Company Info</h3>
+
+@if (settings == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="settings" OnValidSubmit="SaveSettings">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label>Location</label>
+            <InputText class="form-control" @bind-Value="settings.LocationText" />
+            <ValidationMessage For="@(() => settings.LocationText)" class="validation-error" />
+        </div>
+
+        <div class="mb-3">
+            <label>Pin Location (Latitude, Longitude)</label>
+            <InputText class="form-control" @bind-Value="settings.PinLocation" />
+            <ValidationMessage For="@(() => settings.PinLocation)" class="validation-error" />
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <InputText class="form-control" @bind-Value="settings.PhoneNumber" />
+            <ValidationMessage For="@(() => settings.PhoneNumber)" class="validation-error" />
+        </div>
+
+        <div class="mb-3">
+            <label>Company Email</label>
+            <InputText class="form-control" @bind-Value="settings.Email" />
+            <ValidationMessage For="@(() => settings.Email)" class="validation-error" />
+        </div>
+
+        <!-- Social Links -->
+        <div class="mb-3">
+            <label>Facebook</label>
+            <InputText class="form-control" @bind-Value="settings.FacebookLink" />
+            <ValidationMessage For="@(() => settings.FacebookLink)" class="validation-error" />
+        </div>
+        <div class="mb-3">
+            <label>Twitter</label>
+            <InputText class="form-control" @bind-Value="settings.TwitterLink" />
+            <ValidationMessage For="@(() => settings.TwitterLink)" class="validation-error" />
+        </div>
+        <div class="mb-3">
+            <label>LinkedIn</label>
+            <InputText class="form-control" @bind-Value="settings.LinkedInLink" />
+            <ValidationMessage For="@(() => settings.LinkedInLink)" class="validation-error" />
+        </div>
+        <div class="mb-3">
+            <label>Instagram</label>
+            <InputText class="form-control" @bind-Value="settings.InstagramLink" />
+            <ValidationMessage For="@(() => settings.InstagramLink)" class="validation-error" />
+        </div>
+        <div class="mb-3">
+            <label>YouTube</label>
+            <InputText class="form-control" @bind-Value="settings.YoutubeLink" />
+            <ValidationMessage For="@(() => settings.YoutubeLink)" class="validation-error" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </EditForm>
+}
+
+@code {
+    private SettingDto settings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        settings = await Http.GetFromJsonAsync<SettingDto>("api/Settings");
+    }
+
+    private async Task SaveSettings()
+    {
+        var response = await Http.PutAsJsonAsync("api/Settings", settings);
+        if (response.IsSuccessStatusCode)
+        {
+            // show success message
+            // Optionally: You can use Toast or other notification methods to show success
+        }
+    }
+}

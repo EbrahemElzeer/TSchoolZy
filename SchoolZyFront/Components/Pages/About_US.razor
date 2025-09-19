@@ -1,0 +1,273 @@
+﻿@page "/About_Us"
+@using Application.Dto
+@using Application.Service
+@using SchoolZyFront.Components.Layout
+@inject IHttpClientFactory HttpClientFactory
+@layout MainLayout
+
+@inject IJSRuntime JS
+
+<PageTitle>About_Us</PageTitle>
+ 
+ <!-- Breadcrumbs Start -->
+        <div class="rs-breadcrumbs img1">
+            <div class="container">
+                <div class="breadcrumbs-inner">
+                    <h1 class="page-title">About Us</h1>
+                    <div class="description">
+                        <p>Excepteur sint occaecat cupidatat non proident, sunt in coulpa qui official<br> 
+                          
+                            modeserunt mollit anim id est laborum 20 years experience.</p>                   
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+<!-- Breadcrumbs End -->
+<!-- About Section Start -->
+            <div class="rs-about style1 pt-130 pb-130 md-pt-80 md-pb-80">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-12 md-mb-50">
+                           <div class="about-images">
+                               <img class="js-tilt" src="assets/images/about/about-home.png" alt="images">
+                               <div class="rs-addon-services wow fadeinup">
+                                   <div class="services-icon">
+                                       <img src="assets/images/about/fav-light.png" alt="favicon">
+                                   </div>
+                                   <div class="services-text">
+                                       <h4 class="title"> Leading Tech Agency Since 2001</h4>
+                                   </div>
+                               </div>
+                           </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 pl-40 md-pl-15">
+                            <div class="sec-title mb-40 md-mb-0">
+                                <span class="sub-upper pb-13">[ <span class="sub-title">About company</span> ] </span>
+                                <h2 class="title pb-26">
+                                    Improve and Innovate The <span>Tecnolab</span> Trends
+                                </h2>
+                                <div class="desc pb-30">
+                                    Nor is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but occasionally circumstances occur in which toil and pain can procure him some great pleasure. Creation timelines for the digital consulting business theme 2021 standard
+                                </div>
+                                <ul class="rs-features-list">
+                                    <li>
+                                        <i class="fa fa-check-circle"></i>
+                                        <span class="rs-feature-text">Sed ut perspiciatis unde omnis iste natus error</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-check-circle"></i>
+                                        <span class="rs-feature-text">Sed ut perspiciatis unde omnis iste natus error</span>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-check-circle"></i>
+                                        <span class="rs-feature-text">Sed ut perspiciatis unde omnis iste natus error</span>
+                                    </li>
+                                </ul>
+                                <div class="btn-part mt-36">
+                                    <a class="readon started get" href="about.html">Get Started</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- About Section End -->
+
+            <!-- Appointment Section Start -->
+           
+                       <Appointment />
+            <!-- Appointment Section End -->
+
+            <!-- Counter Section Start -->
+            <div class="rs-counter style1">
+                <div class="container">
+                    <div class="counter-top-area text-center">
+                        <div class="row">
+                            <div class="col-lg-4 md-mb-30">
+                                <div class="counter-list">
+                                    <div class="counter-text">
+                                        <div class="count-number">
+                                            <span class="rs-count k">25</span>
+                                        </div>
+                                        <h3 class="title">Products Done</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 md-mb-30">
+                                <div class="counter-list">
+                                    <div class="counter-text">
+                                        <div class="count-number">
+                                            <span class="rs-count k">10</span>
+                                        </div>
+                                        <h3 class="title">Happy Clients</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="counter-list">
+                                    <div class="counter-text">
+                                        <div class="count-number">
+                                            <span class="rs-count plus">25</span>
+                                        </div>
+                                        <h3 class="title">Companies</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+            <!-- Counter Section End -->
+
+            <!-- About Section Start -->
+            <div id="rs-about" class="rs-about style1 pt-216 pb-120 md-pb-80">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-12 pr-55 md-pr-15 md-mb-50">
+                            <div class="sec-title mb-40">
+                                <span class="sub-text pb-10">// About company</span>
+                                <h2 class="title pb-26">
+                                    Improve and Innovate The <span>Tecnolab</span> Trends
+                                </h2>
+                                <div class="desc">
+                                    Nor is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but occasionally circumstances occur in which toil and pain can procure him some great pleasure. Creation timelines for the digital consulting business theme 2021 standard
+                                </div>
+                            </div>
+                            <!-- Skillbar Section Start -->
+                            <div class="rs-skillbar style1">
+                                <div class="cl-skill-bar">
+                                   <!-- Start Skill Bar -->
+                                   <span class="skillbar-title">Analytics</span>
+                                   <div class="skillbar" data-percent="95">
+                                       <p class="skillbar-bar"></p>
+                                       <span class="skill-bar-percent"></span> 
+                                   </div>
+                                   <!-- Start Skill Bar -->
+                                   <span class="skillbar-title">Development</span>
+                                   <div class="skillbar blue-style" data-percent="75">
+                                       <p class="skillbar-bar"></p>
+                                       <span class="skill-bar-percent"></span> 
+                                   </div>
+                                   <!-- Start Skill Bar -->
+                                   <span class="skillbar-title">Solutions</span>
+                                   <div class="skillbar pink-style" data-percent="85">
+                                       <p class="skillbar-bar"></p>
+                                       <span class="skill-bar-percent"></span> 
+                                   </div>
+                                   <!-- Start Skill Bar -->
+                                   <span class="skillbar-title">Support & Security</span>
+                                   <div class="skillbar skyblue-style" data-percent="90">
+                                       <p class="skillbar-bar"></p>
+                                       <span class="skill-bar-percent"></span> 
+                                   </div> 
+                               </div>
+                            </div>
+                           <!-- Skillbar Section End -->
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="about-images">
+                                <img class="js-tilt" src="assets/images/about/about-2.jpg" alt="images">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- About Section End -->
+            <Team />
+          
+
+            <!-- Testimonial Section Start -->
+<ClientTestimonials />
+            <!-- Testimonial Section End -->
+
+            <!-- Partner Section Start -->
+            <div class="rs-partner-section partner-style1 pt-65 pb-65">
+                <div class="container">
+                    <div class="rs-carousel owl-carousel" 
+                        data-loop="true" 
+                        data-items="5" 
+                        data-margin="30" 
+                        data-autoplay="true" 
+                        data-hoverpause="true" 
+                        data-autoplay-timeout="5000" 
+                        data-smart-speed="800" 
+                        data-dots="false" 
+                        data-nav="false" 
+                        data-nav-speed="false" 
+
+                        data-md-device="5" 
+                        data-md-device-nav="false" 
+                        data-md-device-dots="false" 
+                        data-center-mode="false"
+
+                        data-ipad-device2="3" 
+                        data-ipad-device-nav2="false" 
+                        data-ipad-device-dots2="false"
+
+                        data-ipad-device="3" 
+                        data-ipad-device-nav="false" 
+                        data-ipad-device-dots="false" 
+
+                        data-mobile-device="2" 
+                        data-mobile-device-nav="false" 
+                        data-mobile-device-dots="false">  
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/1.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/1.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/2.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/2.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/3.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/3.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/4.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/4.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/5.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/5.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/6.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/6.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/7.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/7.png" title="" alt="">
+                            </a>
+                        </div>
+                        <div class="logo-img">
+                            <a href="https://rstheme.com">
+                                <img class="hovers-logos rs-grid-img" src="assets/images/partner/main-home/8.png" title="" alt="">
+                                <img class="mains-logos rs-grid-img " src="assets/images/partner/main-home/8.png" title="" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+ 
+
+
+
+
+

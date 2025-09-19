@@ -1,0 +1,137 @@
+﻿@page "/Contact"
+@using Application.Dto
+@using Microsoft.AspNetCore.Components.Forms
+@using SchoolZyFront.Components.Layout
+@inject IJSRuntime JS
+@inject HttpClient Http
+@layout MainLayout
+
+<!-- Contact Section Start -->
+<div class="rs-contact contact-style5 pt-130 md-pt-80">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Info -->
+            <div class="col-lg-4 md-mb-60">
+                <div class="contact-box">
+                    <div class="sec-title mb-45">
+                        <span class="sub-text contact pb-7">Let's Talk</span>
+                        <h2 class="title">Speak With Engineers.</h2>
+                    </div>
+                    <div class="address-box mb-25">
+                        <div class="address-icon">
+                            <i class="fa fa-home"></i>
+                        </div>
+                        <div class="address-text">
+                            <span class="label">Phone:</span>
+                            <a href="tel:123222-8888">(123) 222-8888</a>
+                        </div>
+                    </div>
+                    <div class="address-box mb-25">
+                        <div class="address-icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="address-text">
+                            <span class="label">Email:</span>
+                            <a href="mailto:support@rstheme.com">support@rstheme.com</a>
+                        </div>
+                    </div>
+                    <div class="address-box">
+                        <div class="address-icon">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+                        <div class="address-text">
+                            <span class="label">Address:</span>
+                            <div class="desc">New Jersey, 1201, USA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8 pl-70 md-pl-15">
+                <div class="contact-widget">
+                    <div id="form-messages"></div>
+
+                    <EditForm Model="@contactModel" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                       
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-lg-6 mb-30 col-md-6 col-sm-6">
+                                    <InputText class="form-control" id="name" @bind-Value="contactModel.Name" placeholder="Name" />
+                                    <ValidationMessage For="@(() => contactModel.Name)" class="validation-error" />
+
+                                </div>
+                                <div class="col-lg-6 mb-30 col-md-6 col-sm-6">
+                                    <InputText class="form-control" id="email" @bind-Value="contactModel.Email" placeholder="E-Mail" />
+                                    <ValidationMessage For="@(() => contactModel.Email)" class="validation-error" />
+                                </div>
+                                <div class="col-lg-6 mb-30 col-md-6 col-sm-6">
+                                    <InputText class="form-control" id="subject" @bind-Value="contactModel.Subject" placeholder="Subject" />
+                                    <ValidationMessage For="@(() => contactModel.Subject)" class="validation-error" />
+
+                                </div>
+                                <div class="col-lg-12 mb-30">
+                                    <InputTextArea class="form-control" id="message" @bind-Value="contactModel.Message" placeholder="Your message here" />
+                                    <ValidationMessage For="@(() => contactModel.Message)" class="validation-error" />
+
+                                </div>
+                            </div>
+                            <div class="btn-part">
+                                <div class="form-group mb-0">
+                                    <button type="submit" class="btn btn-primary">Send Message</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </EditForm>
+
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success mt-3">@successMessage</div>
+                    }
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger mt-3">@errorMessage</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Map -->
+    <div class="map-canvas pt-130 md-pt-80">
+        <iframe src="https://maps.google.com/maps?q=rstheme&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+    </div>
+</div>
+<!-- Contact Section End -->
+@code {
+    private ContactFormDto contactModel = new ContactFormDto();
+
+    private string? successMessage;
+    private string? errorMessage;
+
+    private async Task HandleValidSubmit()
+    {
+        successMessage = null;
+        errorMessage = null;
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/ContactForm", contactModel);
+
+            if (response.IsSuccessStatusCode)
+            {
+                successMessage = "Your message has been sent successfully!";
+                contactModel = new ContactFormDto(); // reset the form
+            }
+            else
+            {
+                errorMessage = "Failed to send your message. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+}

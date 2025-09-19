@@ -1,0 +1,166 @@
+﻿@page "/dashboard/Team"
+@using Application.Dto
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient Http
+@inject IJSRuntime JS
+@layout DashboardLayout
+@attribute [Authorize]
+<h3>Team Members</h3>
+
+<button class="btn btn-success mb-3" @onclick="ShowAddForm">Add New Member</button>
+
+@if (isEditing || isAdding)
+{
+    <EditForm Model="editingMember" OnValidSubmit="SaveMember">
+        <DataAnnotationsValidator />
+      
+
+        <div class="mb-3">
+            <label>Name</label>
+            <InputText class="form-control" @bind-Value="editingMember.Name" />
+            <ValidationMessage For="@(() => editingMember.Name)" class="validation-error" /> <!-- Validation message for Name -->
+        </div>
+
+        <div class="mb-3">
+            <label>Position</label>
+            <InputText class="form-control" @bind-Value="editingMember.Position" />
+            <ValidationMessage For="@(() => editingMember.Position)" class="validation-error" /> <!-- Validation message for Position -->
+        </div>
+
+        <div class="mb-3">
+            <label>LinkedIn Link</label>
+            <InputText class="form-control" @bind-Value="editingMember.LinkedInLink" />
+            <ValidationMessage For="@(() => editingMember.LinkedInLink)" class="validation-error" /> <!-- Validation message for LinkedIn -->
+        </div>
+
+        <div class="mb-3">
+            <label>Image URL</label>
+            <InputText class="form-control" @bind-Value="editingMember.ImagePath" />
+            <ValidationMessage For="@(() => editingMember.ImagePath)" class="validation-error" /> <!-- Validation message for Image URL -->
+        </div>
+
+        <button type="submit" class="btn btn-primary">@((isAdding) ? "Add" : "Update")</button>
+        <button type="button" class="btn btn-secondary ms-2" @onclick="CancelEdit">Cancel</button>
+    </EditForm>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>LinkedIn</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (teamMembers == null)
+        {
+            <tr><td colspan="5">Loading...</td></tr>
+        }
+        else if (!teamMembers.Any())
+        {
+            <tr><td colspan="5">No team members found.</td></tr>
+        }
+        else
+        {
+            @foreach (var member in teamMembers)
+            {
+                <tr>
+                    <td><img src="@member.ImagePath" alt="@member.Name" width="50" /></td>
+                    <td>@member.Name</td>
+                    <td>@member.Position</td>
+                    <td><a href="@member.LinkedInLink" target="_blank">LinkedIn</a></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" @onclick="() => EditMember(member)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteMember(member.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<TeamMemberDto>? teamMembers;
+    private bool isAdding = false;
+    private bool isEditing = false;
+
+    private TeamMemberDto editingMember = new TeamMemberDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTeamMembers();
+    }
+
+    private async Task LoadTeamMembers()
+    {
+        teamMembers = await Http.GetFromJsonAsync<List<TeamMemberDto>>("api/TeamMember");
+    }
+
+    private async Task ShowAddForm()
+    {
+        Console.WriteLine("ShowAddForm triggered");
+        isAdding = true;
+        isEditing = false;
+        editingMember = new TeamMemberDto();
+        await InvokeAsync(StateHasChanged); // تأكد من إعادة رسم الصفحة
+    }
+
+    private void EditMember(TeamMemberDto member)
+    {
+        isEditing = true;
+        isAdding = false;
+        // Clone to avoid modifying list directly
+        editingMember = new TeamMemberDto
+        {
+            Id = member.Id,
+            Name = member.Name,
+            Position = member.Position,
+            LinkedInLink = member.LinkedInLink,
+            ImagePath = member.ImagePath
+        };
+    }
+
+    private void CancelEdit()
+    {
+        isAdding = false;
+        isEditing = false;
+        editingMember = new TeamMemberDto();
+    }
+
+    private async Task SaveMember()
+    {
+        if (isAdding)
+        {
+            var response = await Http.PostAsJsonAsync("api/TeamMember", editingMember);
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadTeamMembers();
+                isAdding = false;
+            }
+        }
+        else if (isEditing)
+        {
+            var response = await Http.PutAsJsonAsync($"api/TeamMember/{editingMember.Id}", editingMember);
+            if (response.IsSuccessStatusCode)
+            {
+                await LoadTeamMembers();
+                isEditing = false;
+            }
+        }
+    }
+
+    private async Task DeleteMember(int id)
+    {
+        var confirmed = await JS.InvokeAsync<bool>("confirm", "Are you sure you want to delete this member?");
+        if (!confirmed) return;
+
+        var response = await Http.DeleteAsync($"api/TeamMember/{id}");
+        if (response.IsSuccessStatusCode)
+        {
+            await LoadTeamMembers();
+        }
+    }
+}

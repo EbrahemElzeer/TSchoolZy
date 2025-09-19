@@ -1,0 +1,72 @@
+﻿@inherits LayoutComponentBase
+
+<link href="Dashboard.css" rel="stylesheet" />
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarLabel" data-bs-scroll="true" data-bs-backdrop="false">
+    <div class="offcanvas-header d-lg-none">
+        <NavLink href="/dashboard" class="offcanvas-title" id="sidebarLabel">Dashboard</NavLink>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body p-0">
+        <nav class="nav flex-column pt-3">
+            <a class="nav-link px-3 py-2" href="/dashboard/Settings">
+                <i class="bi bi-building"></i> Copmpany Info
+            </a>
+            
+            <a class="nav-link px-3 py-2" href="/dashboard/Client">
+                <i class="bi bi-people"></i> Clients
+            </a>
+            <a class="nav-link px-3 py-2" href="/dashboard/team">
+                <i class="bi bi-person-badge"></i> Team Members
+            </a>
+            <a class="nav-link px-3 py-2" href="/dashboard/Packages">
+                <i class="bi bi-tags"></i> Packages
+            </a>
+            <a class="nav-link px-3 py-2" href="/dashboard/Contact_Forms">
+                <i class="bi bi-envelope"></i> Contact Forms
+            </a>
+            <a class="nav-link px-3 py-2" href="/dashboard/Register">
+                <i class="bi bi-person-add"></i>Register
+            </a>
+            <a class="nav-link px-3 py-2" href="/dashboard/Users">
+                <i class="bi bi-person"></i>Users
+                
+            </a>
+         
+
+        </nav>
+    </div>
+</div>
+
+<div class="d-flex flex-column vh-100">
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container-fluid">
+
+            <!-- زر فتح الـ Sidebar في الموبايل -->
+            <button class="btn btn-outline-primary btn-sm d-lg-none toggle-sidebar-btn me-2"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarOffcanvas"
+                    aria-controls="sidebarOffcanvas">
+                <i class="bi bi-list"></i>
+            </button>
+
+            <!-- اسم أو شعار الموقع -->
+            <a class="navbar-brand fw-bold text-primary" href="/">Dashboard</a>
+
+            <!-- محتوى إضافي ممكن تحطه هنا -->
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <!-- مثلًا: اسم المستخدم أو أيقونات -->
+               
+                <button class="btn btn-outline-secondary btn-sm">Logout</button>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <main id="page-content" class="flex-grow-1">
+        @Body
+    </main>
+</div>

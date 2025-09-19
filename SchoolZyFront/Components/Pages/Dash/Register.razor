@@ -1,0 +1,62 @@
+﻿@page "/Dashboard/Register"
+@inject HttpClient Http
+@using Application.Dto
+@using Microsoft.AspNetCore.Authorization
+@layout DashboardLayout
+@attribute [Authorize]
+<div class="form-container">
+    <h2 class="mb-4">Register</h2>
+
+    <EditForm Model="registerModel" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        @* <ValidationSummary class="validation-summary-error" /> *@
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <InputText id="email" class="form-control" @bind-Value="registerModel.Email" />
+            <ValidationMessage For="@(() => registerModel.Email)" class="validation-error" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="registerModel.Password" />
+            <ValidationMessage For="@(() => registerModel.Password)" class="validation-error" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Register</button>
+    </EditForm>
+
+    @if (submitted)
+    {
+        <p class="text-success mt-3">Registered successfully</p>
+    }
+</div>
+
+@code {
+    private RegisterDto registerModel = new RegisterDto();
+    private bool submitted = false;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Console.WriteLine("Attempting to submit...");
+
+            var response = await Http.PostAsJsonAsync("api/Auth/Register", registerModel);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Registration successful");
+                submitted = true;
+                registerModel = new RegisterDto(); // Reset the form
+            }
+            else
+            {
+                Console.WriteLine("Registration failed: " + response.StatusCode);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine("Error submitting form: " + ex.Message);
+        }
+    }
+}
