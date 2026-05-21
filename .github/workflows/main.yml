@@ -1,0 +1,29 @@
+name: .NET Core CI Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # اتأكد إن دي نفس نسخة الـ .NET بتاعت مشروعك
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build the project
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Run Tests
+      run: dotnet test --no-build --configuration Release
