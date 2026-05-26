@@ -23,7 +23,7 @@ namespace TSchoolZy
         {
 
 
-            int x = "hello";
+          
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddCors(options =>
