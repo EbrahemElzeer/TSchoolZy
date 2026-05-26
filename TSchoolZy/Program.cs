@@ -21,6 +21,9 @@ namespace TSchoolZy
     {
         public static async Task Main(string[] args)
         {
+
+
+            int x = "hello";
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddCors(options =>
