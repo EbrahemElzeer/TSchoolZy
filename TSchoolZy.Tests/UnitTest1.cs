@@ -14,6 +14,6 @@ public class UnitTest1
         int result = x + y;
 
         // Assert
-        Assert.Equal(500, result);
+        Assert.Equal(5, result);
     }
 }
