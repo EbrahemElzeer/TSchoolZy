@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "DataAccessLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchoolZyFront", "SchoolZyFront\SchoolZyFront.csproj", "{D640F11E-7B9C-420F-8CD0-3AF931924FE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSchoolZy.Tests", "TSchoolZy.Tests\TSchoolZy.Tests.csproj", "{800B57D4-DD8C-4176-9DD4-7952E349DCEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSchoolZy.Tests.Service", "TSchoolZy.Tests\TSchoolZy.Tests.Service.csproj", "{800B57D4-DD8C-4176-9DD4-7952E349DCEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -100,6 +102,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{800B57D4-DD8C-4176-9DD4-7952E349DCEF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33A63F15-6E68-406C-B2C3-9D547262FF98}
